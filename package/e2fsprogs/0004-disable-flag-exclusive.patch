@@ -1,0 +1,19 @@
+diff --git a/resize/main.c b/resize/main.c
+index 396391b..f5e2931 100644
+--- a/resize/main.c
++++ b/resize/main.c
+@@ -398,8 +398,12 @@ int main (int argc, char ** argv)
+ #endif
+ 		io_ptr = unix_io_manager;
+ 
+-	if (!(mount_flags & EXT2_MF_MOUNTED))
+-		io_flags = EXT2_FLAG_RW | EXT2_FLAG_EXCLUSIVE;
++	if (!(mount_flags & EXT2_MF_MOUNTED)) {
++		io_flags = EXT2_FLAG_RW;
++		if (!getenv("DISABLE_FLAG_EXCLUSIVE")) {
++			io_flags |= EXT2_FLAG_EXCLUSIVE;
++		}
++	}
+ 
+ 	io_flags |= EXT2_FLAG_64BITS;
+ 	if (undo_file) {
